@@ -3,6 +3,9 @@ type User = {
     avatarUrls: Record<string, string>
 }
 
+type UserList = Record<string, User>
+type CustomSearchElementResult = Element | null | undefined
+
 export class Transformer {
     private itemSelector: string
     private kanbanItemSelector: string
@@ -12,7 +15,7 @@ export class Transformer {
     private revId: string
     private backgroundColor: string
     private color: string
-    private users: Record<string, User> = {}
+    private users: UserList = {}
 
     constructor() {
         console.log('Transformer - init')
@@ -36,7 +39,7 @@ export class Transformer {
         this.init()
     }
 
-    private async init() {
+    private async init(): Promise<void> {
         this.appendStyles()
         this.users = await this.getUsers()
 
@@ -44,7 +47,7 @@ export class Transformer {
         this.initMutator()
     }
 
-    private appendStyles() {
+    private appendStyles(): void {
         GM_addStyle(
             `${this.kanbanItemSelector} [data-testid="platform-card.common.ui.custom-fields.custom-card-field-list"] { display: none !important; }`
         )
@@ -89,42 +92,46 @@ export class Transformer {
         )
     }
 
-    private async getUsers(): Promise<Record<string, User>> {
-        const response = await fetch('/rest/api/3/users?maxResults=100')
+    private async getUsers(): Promise<UserList> {
+        const response: Response = await fetch('/rest/api/3/users?maxResults=100')
         const result: User[] = await response.json()
 
-        return result.reduce((acc, user) => {
+        return result.reduce((acc: UserList, user: User) => {
             acc[user.displayName] = user
             return acc
-        }, {} as Record<string, User>)
+        }, {} as UserList)
     }
 
-    private transformPage() {
+    private transformPage(): void {
         const list = document.querySelectorAll(this.itemSelector)
-        list.forEach((item) => this.transformRow(item as HTMLElement))
+        list.forEach((item: Element) => this.transformRow(item as HTMLElement))
     }
 
-    private async transformRow(item: HTMLElement) {
-        const presentation = item.closest('[role="presentation"]')
-        if (presentation?.classList.contains('4logist-affected')) {
+    private async transformRow(item: HTMLElement): Promise<void> {
+        const presentation: CustomSearchElementResult = item.closest('[role="presentation"]')
+        if (!presentation) {
             return
         }
 
-        presentation?.classList.add('4logist-affected')
+        if (presentation.classList.contains('4logist-affected')) {
+            return
+        }
+
+        presentation.classList.add('4logist-affected')
 
         setTimeout(() => {
-            const userName = item.innerText.trim()
-            const container = document.createElement('div')
+            const userName: string = item.innerText.trim()
+            const container: HTMLDivElement = document.createElement('div')
             container.classList.add('logist-avatar-container')
             container.dataset.name = this.getSuffixOfRole(item.dataset.issuefieldid || '')
 
-            const image = document.createElement('img')
+            const image: HTMLImageElement = document.createElement('img')
             image.classList.add('logist-avatar-24')
             image.src = this.users[userName]?.avatarUrls['24x24'] || ''
 
             container.append(image)
 
-            const avatarContainer = item
+            const avatarContainer: CustomSearchElementResult = item
                 .closest(this.kanbanItemSelector)
                 ?.querySelector(`${this.avatarContainerSelector}, ${this.avatarWrapperSelector}`)
 
@@ -132,24 +139,23 @@ export class Transformer {
         })
     }
 
-    private initMutator() {
-        const observer = new MutationObserver(this.mutatorCallback.bind(this))
+    private initMutator(): void {
+        const observer: MutationObserver = new MutationObserver(this.mutatorCallback.bind(this))
 
         observer.observe(document.body, {
             childList: true,
             subtree: true,
-        })
+        } as MutationObserverInit)
     }
 
-    private mutatorCallback(mutations: MutationRecord[]) {
+    private mutatorCallback(mutations: MutationRecord[]): void {
         mutations.forEach((mutation) => this.nodeAffector(Array.from(mutation.addedNodes)))
     }
 
-    private nodeAffector(nodes: Node[]) {
-        nodes.forEach((node) => {
+    private nodeAffector(nodes: Node[]): void {
+        nodes.forEach((node: Node): void => {
             if (node.nodeType === Node.ELEMENT_NODE && (node as Element).matches(this.kanbanItemSelector)) {
-                (node as Element).querySelectorAll(this.itemSelector)
-                    .forEach((item: Element) => this.transformRow(item as HTMLElement))
+                (node as Element).querySelectorAll(this.itemSelector).forEach((item: Element) => this.transformRow(item as HTMLElement))
             }
         })
     }
