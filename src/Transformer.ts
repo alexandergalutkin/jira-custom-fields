@@ -49,7 +49,7 @@ export class Transformer {
 
     private appendStyles(): void {
         GM_addStyle(
-            `${this.kanbanItemSelector} [data-testid="platform-card.common.ui.custom-fields.custom-card-field-list"] { display: none !important; }`
+            `[data-testid="platform-card.common.ui.custom-fields.custom-card-field-list"] { display: none !important; }`
         )
 
         GM_addStyle(

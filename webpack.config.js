@@ -41,7 +41,7 @@ module.exports = {
             banner: `// ==UserScript==
 // @name         JCF
 // @namespace    https://tampermonkey.net/
-// @version      0.0.2-ts
+// @version      0.0.3
 // @description  Jira Custom Fields for 4logist
 // @author       You
 // @match        https://4logist.atlassian.net/jira/software/c/projects/DEV/boards/*

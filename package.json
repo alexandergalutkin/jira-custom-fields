@@ -1,6 +1,6 @@
 {
   "name": "jira-custom-fields",
-  "version": "0.0.2-ts",
+  "version": "0.0.3",
   "description": "Jira Custom Fields for 4logist",
   "scripts": {
     "build": "webpack"
