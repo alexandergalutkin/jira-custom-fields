@@ -1,13 +1,21 @@
 ## Требования
-`node -v` // 20.17.0
+`node -v` // 20.17.0\
+Установить `tampermonkey` как расширение в свой браузер // [брать отсюда (кликабельно)](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+
+## Release версия
+Заходите в список [последних версий релиза](https://github.com/alexandergalutkin/jira-custom-fields/releases) и нажимаете на `dist.user.js`
+
+![image](https://github.com/user-attachments/assets/76878e6e-2c55-494f-a130-c589e144cb58)
+
+Отобразится окно `Tampermonkey`, где необходимо нажать кнопку `Установить` (или `Переустановить`, если эта версия у вас уже была установлена)
+
+![image](https://github.com/user-attachments/assets/767f763e-d542-48b6-b384-0673cd847172)
+
 
 ## Ручная сборка
 1. `yarn install`
 2. `yarn webpack`
 3. Скопировать из `dist/dist.js` в новый скрипт `Tampermonkey`
-
-## Release версия
-Можно взять [последнюю версию релиза](https://github.com/alexandergalutkin/jira-custom-fields/releases) и вставить в новый (если ещё не был создан) скрипт или обновить старый
 
 ## Создание нового скрипта в Tampermonkey
 1. Переходим в расширение, нажимаем "Создать новый скрипт"\
