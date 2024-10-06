@@ -41,12 +41,13 @@ module.exports = {
             banner: `// ==UserScript==
 // @name         JCF
 // @namespace    https://tampermonkey.net/
-// @version      0.0.3
+// @version      0.0.4
 // @description  Jira Custom Fields for 4logist
 // @author       You
-// @match        https://4logist.atlassian.net/jira/software/c/projects/DEV/boards/*
+// @match        https://*.atlassian.net/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=atlassian.net
 // @grant        GM_addStyle
+// @run-at       document-start
 // ==/UserScript==
 
 `,
