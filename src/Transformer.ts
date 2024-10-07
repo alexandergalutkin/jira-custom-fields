@@ -8,11 +8,8 @@ export class Transformer {
     private readonly avatarWrapperSelector: string
     private readonly storySelector: string
     private readonly historyType: string
-
-    readonly color: string
     readonly kanbanItemSelector: string
     readonly storyContentSelector: string
-    readonly backgroundColor: string
 
     private users!: DataBoardPeopleJson
     private issues!: CustomJiraIssues
@@ -21,6 +18,9 @@ export class Transformer {
 
     private intercepting!: CustomFetchIntercepting
     private fetchInterceptor!: FetchInterceptor
+
+    backgroundColor!: string
+    color!: string
 
     constructor(configOptions: CustomTransformerConfigOptions) {
         console.log('Transformer - init')
@@ -36,14 +36,6 @@ export class Transformer {
         this.historyType = configOptions.historyType
         this.customFields = configOptions.customFields
 
-        this.backgroundColor = '#21272c'
-        this.color = '#ffffff'
-
-        if (document.querySelector('html')?.dataset.colorMode === 'light') {
-            this.backgroundColor = '#ffffff'
-            this.color = '#333333'
-        }
-
         this.checkboxChangeHandler = this.checkboxChangeHandler.bind(this)
     }
 
@@ -51,8 +43,11 @@ export class Transformer {
         this.initIntercepting()
 
         unsafeWindow.addEventListener('DOMContentLoaded', (): void => {
-            this.appendStyles()
             this.callSettingsModal()
+        })
+
+        unsafeWindow.addEventListener('load', (): void => {
+            this.appendStyles()
         })
 
         unsafeWindow.addEventListener('keydown', (event: KeyboardEvent): void => {
@@ -375,6 +370,14 @@ export class Transformer {
     }
 
     private async appendStyles(): Promise<void> {
+        this.backgroundColor = '#21272c'
+        this.color = '#ffffff'
+
+        if (document.querySelector('html')?.dataset.colorMode === 'light') {
+            this.backgroundColor = '#ffffff'
+            this.color = '#333333'
+        }
+
         GM_addStyle(generateStyle(this))
     }
 }
