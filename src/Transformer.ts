@@ -75,18 +75,20 @@ export class Transformer {
     }
 
     private firstInitialize(): CustomSettings {
-        unsafeWindow.AJS.flag({
-            type: 'info',
-            title: 'Первый запуск скрипта',
-            body: `
-                <p>Скрипт инициализирован успешно</p>
-                <p>Если вы хотите настроить его (например выключить отображение букв роли над аватарками или отключить их самих), то нажмите следующее сочетание клавиш:</p>
-                <p class="logist-button">
-                    <span>ALT + A</span>
-                </p>
-            `,
-            close: 'manual'
-        })
+        setTimeout(() => {
+            unsafeWindow.AJS.flag({
+                type: 'info',
+                title: 'Первый запуск скрипта',
+                body: `
+                    <p>Скрипт инициализирован успешно</p>
+                    <p>Если вы хотите настроить его (например выключить отображение букв роли над аватарками или отключить их самих), то нажмите следующее сочетание клавиш:</p>
+                    <p class="logist-button">
+                        <span>ALT + A</span>
+                    </p>
+                `,
+                close: 'manual'
+            })
+        }, 1000)
 
         return {
             toggleRoleNameUnderIcon: {

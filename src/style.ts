@@ -1,6 +1,8 @@
 import {Transformer} from "./Transformer"
 
 export default function generateStyle(context: Transformer) {
+    const logistSelectorBlock = 'div[data-testid="platform-card.ui.card.card-content.footer"] [class*="_footerChildSection"] + div > div'
+
     return `
         [data-testid="platform-card.common.ui.custom-fields.custom-card-field-list"] {
             display: none !important;
@@ -102,12 +104,12 @@ export default function generateStyle(context: Transformer) {
         /* Скопировано из jira */
         
         
-        .logist-selector {
+        .logist-selector, ${logistSelectorBlock} {
             display: inline-flex;
             margin-top: .5rem;
         }
         
-        .logist-selector > span {
+        .logist-selector > span, ${logistSelectorBlock} {
             font-size: 12px;
             margin-left: .5rem;
         }
